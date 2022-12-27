@@ -15,7 +15,7 @@ struct ProductDetailsView: View {
     var product: ProductItemViewModel
     
     var body: some View {
-        ScrollView {
+        ZStack {
             VStack(alignment: .leading) {
                 TabView {
                     ForEach(product.images, id: \.self) { imageUrlString in
@@ -31,7 +31,6 @@ struct ProductDetailsView: View {
                     }
                 }
                 .tabViewStyle(.page)
-                .frame(height: 220)
                 
                 VStack(alignment: .leading) {
                     HStack {
@@ -107,8 +106,17 @@ struct ProductDetailsView: View {
                 Spacer()
             }
             .navigationTitle("iPhone 9")
-        .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.inline)
         }
+        .onAppear {
+            setupAppearance()
+        }
+    }
+    
+    
+    func setupAppearance() {
+        UIPageControl.appearance().currentPageIndicatorTintColor = .systemBlue
+        UIPageControl.appearance().pageIndicatorTintColor = UIColor.systemBlue.withAlphaComponent(0.2)
     }
 }
 

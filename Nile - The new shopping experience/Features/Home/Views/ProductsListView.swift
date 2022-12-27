@@ -22,7 +22,7 @@ struct ProductsListView: View {
                             AsyncImage(url: URL(string: product.thumbnail)) { image in
                                 image
                                     .resizable()
-                                    .frame(height: 110)
+//                                    .frame(height: 110)
                                     .aspectRatio(contentMode: ContentMode.fit)
                             } placeholder: {
                                 Rectangle()
