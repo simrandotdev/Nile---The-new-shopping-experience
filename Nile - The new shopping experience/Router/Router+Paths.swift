@@ -12,14 +12,15 @@ extension Router {
     
     /// Define all the paths and their corresponding bodies
     enum Paths: Hashable, View {
-        case productDetails(String)
+        
+        case productDetails(ProductItemViewModel)
         case rootHomeView
         
         /// Here we define what View.body to show for a particular `Path`
         var body: some View {
             switch self {
-            case .productDetails(let productTitle):
-                return AnyView(ProductDetailsView(productTitle: productTitle))
+            case .productDetails(let product):
+                return AnyView(ProductDetailsView(product: product))
             case .rootHomeView:
                 return AnyView(HomeTabView())
             }

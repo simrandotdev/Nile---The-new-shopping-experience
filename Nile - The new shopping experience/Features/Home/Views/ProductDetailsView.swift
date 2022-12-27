@@ -12,16 +12,22 @@ struct ProductDetailsView: View {
     @State private var quantity: Int = 1
     @EnvironmentObject private var router: Router
     
-    var productTitle: String
+    var product: ProductItemViewModel
     
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
                 TabView {
-                    ForEach(0..<4) { _ in
-                        Image("product_thumbnail")
-                            .resizable()
-                            .scaledToFit()
+                    ForEach(product.images, id: \.self) { imageUrlString in
+                        AsyncImage(url: URL(string: imageUrlString)) { image in
+                            image
+                                .resizable()
+                                .scaledToFit()
+                        } placeholder: {
+                            Rectangle()
+                                .frame(height: 200)
+                                .redacted(reason: RedactionReasons.privacy)
+                        }
                     }
                 }
                 .tabViewStyle(.page)
@@ -29,7 +35,7 @@ struct ProductDetailsView: View {
                 
                 VStack(alignment: .leading) {
                     HStack {
-                        Text(productTitle)
+                        Text(product.title)
                             .font(.title)
                             .fontDesign(.rounded)
                             .bold()
@@ -40,20 +46,20 @@ struct ProductDetailsView: View {
                     }
                     
                     HStack(spacing: 0) {
-                        Text("🌟 4.96")
+                        Text("🌟 \(product.rating)")
                         Text(" | ")
-                        Text("24 items in stock")
+                        Text("\(product.stock) items in stock")
                             .foregroundColor(.blue)
                     }
                     .font(.caption2)
                     
-                    Text("SIM-Free, Model A19211 6.5-inch Super Retina HD display with OLED technology A12 Bionic chip.")
+                    Text(product.description)
                         .font(.system(size: 14))
                         .fontWeight(.light)
                         .lineSpacing(1.4)
                         .padding(.vertical, 8)
                     HStack {
-                        Text("$199.99")
+                        Text("$\(product.price)")
                             .font(.title3)
                             .fontDesign(.rounded)
                             .bold()
@@ -84,6 +90,8 @@ struct ProductDetailsView: View {
                         }
                     }
                     
+                    Spacer()
+                    
                     Button {
                         router.homeTabPath = NavigationPath()
                     } label: {
@@ -104,12 +112,12 @@ struct ProductDetailsView: View {
     }
 }
 
-struct ProductDetailsView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            ProductDetailsView(productTitle: "Product Title")
-                .navigationTitle("iPhone 9")
-                .navigationBarTitleDisplayMode(.inline)
-        }
-    }
-}
+//struct ProductDetailsView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        NavigationStack {
+//            ProductDetailsView(product: ProductItemViewModel(product: <#T##ProductItem#>))
+//                .navigationTitle("iPhone 9")
+//                .navigationBarTitleDisplayMode(.inline)
+//        }
+//    }
+//}

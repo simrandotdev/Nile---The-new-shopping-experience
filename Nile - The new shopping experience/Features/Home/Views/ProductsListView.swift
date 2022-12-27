@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ProductsListView: View {
     @State private var searchText: String = ""
+    @StateObject private var vm = ProductsListViewModel()
     
     @EnvironmentObject private var router: Router
     
@@ -16,22 +17,30 @@ struct ProductsListView: View {
         VStack {
             ScrollView {
                 LazyVGrid(columns: [.init(.flexible()), .init(.flexible())]) {
-                    ForEach(0..<20) { index in
+                    ForEach(vm.productsListViewModel) { product in
                         VStack(alignment: .leading) {
-                            Image("product_thumbnail")
-                                .resizable()
-                                .scaledToFill()
+                            AsyncImage(url: URL(string: product.thumbnail)) { image in
+                                image
+                                    .resizable()
+                                    .frame(height: 110)
+                                    .aspectRatio(contentMode: ContentMode.fit)
+                            } placeholder: {
+                                Rectangle()
+                                    .frame(height: 110)
+                                    .redacted(reason: RedactionReasons.privacy)
+                            }
+
                             
                             VStack(alignment: .leading, spacing: 4) {
                                 HStack {
-                                    Text("Product Title \(index)")
+                                    Text(product.title)
                                         .font(.system(size: 14, design: .rounded).bold())
                                     Spacer()
-                                    Text("4.96 🌟")
+                                    Text("\(product.rating) 🌟")
                                         .font(.caption2)
                                 }
                                 
-                                Text("Category")
+                                Text(product.category.capitalized)
                                     .font(.caption)
                                     .fontWeight(.light)
                                     .foregroundColor(.gray)
@@ -39,7 +48,7 @@ struct ProductsListView: View {
 
 
                                 HStack {
-                                    Text("$199.99")
+                                    Text("$\(product.price)")
                                         .font(.caption)
                                         .fontDesign(.rounded)
                                         .bold()
@@ -60,7 +69,7 @@ struct ProductsListView: View {
                         .cornerRadius(6)
                         .padding(0)
                         .onTapGesture {
-                            router.routeTo(Router.Paths.productDetails("Product Title \(index)"))
+                            router.routeTo(Router.Paths.productDetails(product))
                         }
                     }
                 }
