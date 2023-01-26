@@ -23,6 +23,9 @@ struct ProductDetailsView: View {
                             image
                                 .resizable()
                                 .scaledToFit()
+                                .cornerRadius(10)
+                                .padding(4)
+                                .shadow(radius: 10, x: 10, y: 10)
                         } placeholder: {
                             Rectangle()
                                 .frame(height: 200)
@@ -58,7 +61,7 @@ struct ProductDetailsView: View {
                         .lineSpacing(1.4)
                         .padding(.vertical, 8)
                     HStack {
-                        Text("$\(product.price)")
+                        Text(String(format: "$%.2f", product.price))
                             .font(.title3)
                             .fontDesign(.rounded)
                             .bold()

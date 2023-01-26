@@ -17,7 +17,15 @@ final class ProductsAPIManager {
         guard let url = URL(string: "https://dummyjson.com/products") else {
             return FetchProductsResponse(products: [], total: 0, skip: 0, limit: 0)
         }
-        let (data, _) = try await URLSession.shared.data(from: url)
-        return try JSONDecoder().decode(FetchProductsResponse.self, from: data)
+        return try await URLSession.shared.object(from: url, type: FetchProductsResponse.self)
+    }
+}
+
+
+extension URLSession {
+    
+    func object<T: Codable>(from url: URL, type: T.Type) async throws -> T {
+        let (data, _) = try await data(from: url)
+        return try JSONDecoder().decode(type.self, from: data)
     }
 }

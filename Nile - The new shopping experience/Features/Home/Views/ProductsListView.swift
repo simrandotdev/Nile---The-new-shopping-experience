@@ -16,13 +16,12 @@ struct ProductsListView: View {
     var body: some View {
         VStack {
             ScrollView {
-                LazyVGrid(columns: [.init(.flexible()), .init(.flexible())]) {
+                LazyVGrid(columns: [.init(.flexible())]) {
                     ForEach(vm.productsListViewModel) { product in
                         VStack(alignment: .leading) {
                             AsyncImage(url: URL(string: product.thumbnail)) { image in
                                 image
                                     .resizable()
-//                                    .frame(height: 110)
                                     .aspectRatio(contentMode: ContentMode.fit)
                             } placeholder: {
                                 Rectangle()
@@ -48,7 +47,7 @@ struct ProductsListView: View {
 
 
                                 HStack {
-                                    Text("$\(product.price)")
+                                    Text(String(format: "$%.2f", product.price))
                                         .font(.caption)
                                         .fontDesign(.rounded)
                                         .bold()
@@ -62,12 +61,12 @@ struct ProductsListView: View {
 
                                 }
                             }
-                            .padding(.horizontal, 4)
+                            .padding(.horizontal, 8)
                             .padding(.bottom, 8)
                         }
                         .background(Color.gray.opacity(0.12))
                         .cornerRadius(6)
-                        .padding(0)
+                        .padding(8)
                         .onTapGesture {
                             router.routeTo(Router.Paths.productDetails(product))
                         }
